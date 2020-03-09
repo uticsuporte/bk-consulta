@@ -40,7 +40,7 @@ app.post('/consulta', (req,res) => {
     let scriptSQL = 'select p.NomeRazaoSocial, h.Instrumento, h.NomeRealizacao, h.DataHoraInicioRealizacao '
     +'from HistoricoRealizacoesCliente_AnosAnteriores h, parceiro p '
     +'where h.CodCliente = p.CodParceiro and p.CgcCpf = ' + req.body.cpf 
-    +' ORDER BY h.DataHoraInicioRealizacao'
+    +' ORDER BY h.DataHoraInicioRealizacao DESC'
 
     conn.connect(function (error){
         if(error){
