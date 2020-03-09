@@ -47,34 +47,38 @@ app.post('/', (req,res) => {
     +'where h.CodCliente = p.CodParceiro and p.CgcCpf = ' + req.body.cpf 
     +' ORDER BY h.DataHoraInicioRealizacao DESC'
 
-    conn.connect(function (error){
-        if(error){
-            console.log(error)
-            res.sendStatus(401).json({message: 'Erro de conexão com o banco de dados: ', error})
-            return
-        }else{
-            // console.log('conexao estabelecida')
-            // console.log(scriptSQL)
-            reqSql.query(scriptSQL, function (error,recordset){
-                if(error){
-                    res.sendStatus(401).json({message: 'Erro SQL: ', error})
-                }else{
-                    console.log(recordset.rowsAffected)
-                    if(recordset.rowsAffected[0] != 0){
-                        res.send({
-                            message: 'Success',
-                            Nome: recordset.recordset[0].NomeRazaoSocial, 
-                            Historico_Realizacoes: recordset.recordset,
-    
-                        })
+    try {
+        conn.connect(function (error){
+            if(error){
+                console.log(error)
+                res.sendStatus(401).json({message: 'Erro de conexão com o banco de dados: ', error})
+                return
+            }else{
+                // console.log('conexao estabelecida')
+                // console.log(scriptSQL)
+                reqSql.query(scriptSQL, function (error,recordset){
+                    if(error){
+                        res.sendStatus(401).json({message: 'Erro SQL: ', error})
                     }else{
-                        res.send({message: 'data not found'})
+                        console.log(recordset.rowsAffected)
+                        if(recordset.rowsAffected[0] != 0){
+                            res.send({
+                                message: 'Success',
+                                Nome: recordset.recordset[0].NomeRazaoSocial, 
+                                Historico_Realizacoes: recordset.recordset,
+        
+                            })
+                        }else{
+                            res.send({message: 'data not found'})
+                        }
+                        conn.close()
                     }
-                    conn.close()
-                }
-            })
-        }
-    })
+                })
+            }
+        })
+    } catch (error) {
+        res.sendStatus(401).json({message: "Erro ao se conectar com o banco de dados. Erro: ", error})
+    }
     
 })
 
