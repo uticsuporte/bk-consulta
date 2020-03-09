@@ -30,7 +30,12 @@ app.use(bodyParser.urlencoded( {extended: false} ))
 app.use(allowCrossDomain);
 
 
-app.post('/consulta', (req,res) => {
+app.get('/', (req,res)=>{
+    res.send({message: 'Funcionando'})
+})
+
+
+app.post('/', (req,res) => {
 
     console.log(req.body)
 
@@ -75,7 +80,7 @@ app.post('/consulta', (req,res) => {
 
 const port = 8080
 
-app.listen(port , () => {
+app.listen(process.env.PORT || port , () => {
     console.log('Server running in localhost: ' + port)
 })
 
